@@ -1,0 +1,38 @@
+Vagrant.configure("2") do |config|
+  # Ubuntu 22.04 LTS
+  config.vm.box = "ubuntu/jammy64"
+  config.vm.hostname = "gitlab-ce"
+
+  # Private network: host-only. Host can reach VM, VM is not public.
+  # Pick a subnet that does not collide with your host/Hetzner network.
+  config.vm.network "private_network", ip: "192.168.56.101", adapter: 2
+
+  # OPTIONAL: if you want to access GitLab UI from your laptop via SSH tunnel,
+  # you can forward a host port to VM. For your Hetzner setup, you likely DON'T need this.
+  # config.vm.network "forwarded_port", guest: 8080, host: 18080, host_ip: "127.0.0.1"
+
+  # Resize root disk BEFORE first boot
+  # VirtualBox default is 40GB, which should be enough for the lab, but you can increase it.
+  # Requires vagrant-disksize plugin: `vagrant plugin install vagrant-disksize`
+  # Uncomment the line below to enable disk resizing
+  # config.disksize.size = "60GB"
+
+  # GitLab is memory-hungry. 4GB is minimum; 6-8GB is nicer.
+  config.vm.provider "virtualbox" do |vb|
+    vb.name = "gitlab-ce-lab"
+    vb.cpus = 2
+    vb.memory = 6144
+  end
+
+  # GitLab stores a lot of data; the default /vagrant synced folder can cause pain.
+  # Disable it and create your own small, explicit synced folder if needed.
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  # Optional: keep a small synced folder for scripts only
+  config.vm.synced_folder "./provision", "/opt/provision", create: true
+
+  # Basic provisioning (you can replace this with Ansible later)
+  config.vm.provision "shell",
+    path: "provision/install_gitlab.sh",
+    privileged: true
+end

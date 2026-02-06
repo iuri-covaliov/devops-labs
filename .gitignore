@@ -1,0 +1,12 @@
+# temporary folders and files
+**tmp/
+**temp/
+
+# backup folders and files
+**backup/
+**backups/
+
+# Vagrant VMs, config files for VM in the root folder (experimental)
+**.vagrant/
+/Vagrantfile
+/provision/
