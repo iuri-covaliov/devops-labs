@@ -14,7 +14,7 @@ administrative access.
 
 Full architecture walkthrough and explanation:
 
-> (Add article link here after publishing)
+👉 https://dev.to/iuri_covaliov/securing-a-remote-linux-host-with-firewalld-and-openvpn-291g
 
 ------------------------------------------------------------------------
 
