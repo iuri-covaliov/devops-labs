@@ -1,0 +1,38 @@
+name: GitHub Actions to AWS OIDC Deploy Phase 2
+
+on:
+  # manual trigger
+  workflow_dispatch:
+  # trigger on push to listed branches, uncomment to enable
+  # push:
+  #   branches:
+  #     - main
+  #     - lab3  # current branch, temporary
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./GitHubActionswithAWSOIDC/
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.AWS_ROLE_NAME }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-session-name: gha-oidc-s3-deploy
+
+      - name: Who am I?
+        run: aws sts get-caller-identity
+
+      - name: Deploy site to AWS S3
+        run: |
+          aws s3 sync ./examples/site s3://${{ secrets.S3_BUCKET }}/ --delete
