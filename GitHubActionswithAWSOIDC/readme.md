@@ -2,7 +2,9 @@
 
 This lab walks through a practical migration: first, a GitHub Actions workflow deploys a small static site to Amazon S3 using long‑lived AWS keys. Then we remove those keys and switch to short‑lived credentials using GitHub OIDC federation and IAM role assumption.
 
-Article: <ARTICLE_LINK>
+Article:
+
+👉 https://dev.to/iuri_covaliov/replacing-static-aws-credentials-in-cicd-with-github-oidc-a-practical-devops-lab-2222
 
 ## What this lab demonstrates
 
@@ -17,8 +19,12 @@ Article: <ARTICLE_LINK>
 ### Phase 1 — Make it work
 GitHub Actions reads `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` from GitHub Secrets and uploads site files to an S3 bucket.
 
+![Phase 1 diagram](./docs/images/phase1.png)
+
 ### Phase 2 — Reduce trust / Harden access
 GitHub Actions requests an OIDC token, assumes an IAM role via `sts:AssumeRoleWithWebIdentity`, and receives short‑lived credentials used to upload the same files to S3.
+
+![Phase 2 diagram](./docs/images/phase2.png)
 
 See: `docs/architecture.md`.
 
@@ -64,12 +70,3 @@ GitHub-AWS-OIDC-Lab/
 - Add the optional **ECR + ECS** extension (container build/push/deploy) using the same OIDC role
 - Add Terraform to provision the OIDC provider, role, and S3 bucket
 - Harden further with environment-based conditions (GitHub Environments) and tighter S3 policies
-
-## Published labs in this series
-
-- Securing a Remote Linux Host with firewalld and OpenVPN
-  - article: https://dev.to/iuri_covaliov/securing-a-remote-linux-host-with-firewalld-and-openvpn-291g
-  - repo: https://github.com/iuri-covaliov/devops-labs/tree/main/ProtectRemoteHostWithFirewallAndVPN
-- GitLab Behind Cloudflare Zero Trust
-  - article: https://dev.to/iuri_covaliov/self-hosting-gitlab-behind-cloudflare-zero-trust-a-practical-devops-lab-18ce
-  - repo: https://github.com/iuri-covaliov/devops-labs/tree/main/GitLabSE-behind-CloudFlare
