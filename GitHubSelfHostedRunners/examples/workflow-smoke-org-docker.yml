@@ -1,0 +1,26 @@
+name: self-hosted-smoke-org
+
+# NOTE:
+# Docker must be installed via apt (not Snap) on Ubuntu,
+# otherwise the runner workspace under /opt may not be accessible.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  docker-build:
+    runs-on: [self-hosted, Linux, X64, ci]
+    defaults:
+      run:
+        working-directory: ./GitHubSelfHostedRunners/examples
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Build image
+        run: |
+          docker build -t lab-test-image .
+
+      - name: Run container
+        run: |
+          docker run --rm lab-test-image

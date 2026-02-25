@@ -358,6 +358,10 @@ If you added `org-shared`, you can require it:
 runs-on: [self-hosted, linux, x64, org-shared]
 ```
 
+Workflow examples:
+  - [Smoke test for organization runner](./examples/workflow-smoke-org.yml)
+  - [Workflow building Docker image](./examples/workflow-smoke-org-docker.yml)
+
 Expected result:
 - Jobs schedule only onto runners with those labels.
 
