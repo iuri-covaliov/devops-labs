@@ -44,6 +44,8 @@ Never configure two runners in the same directory.
 - Outbound internet access (to download the runner and fetch dependencies)
 - Inbound ports: **not required** for the runner itself (it polls GitHub outbound)
 
+---
+
 ### Server packages
 Install a few utilities:
 
@@ -54,6 +56,33 @@ sudo apt-get install -y curl tar gzip ca-certificates jq
 
 Expected result:
 - Packages install without errors.
+
+---
+
+### Docker Installation (Recommended)
+
+Avoid installing Docker via Snap on Ubuntu, as Snap confinement can prevent Docker from accessing the runner workspace under `/opt`.
+
+Install Docker via apt:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y docker.io
+sudo systemctl enable --now docker
+```
+
+Verify:
+```
+which docker
+systemctl status docker --no-pager
+```
+
+Expected:
+```
+Docker binary at /usr/bin/docker
+...
+Service active (running)
+```
 
 ---
 
@@ -271,7 +300,7 @@ sudo -u "$RUNNER_USER" -H bash -lc "cd '$ORG_RUNNER_DIR' && curl -fsSL -o action
 ### 3) Register at Organization Scope
 
 ```
-sudo -u "$RUNNER_USER" -H bash -lc "cd '$ORG_RUNNER_DIR' && ./config.sh --url $ORG_URL --token '$ORG_RUNNER_TOKEN' --name '$ORG_RUNNER_NAME' --labels '$PERSONAL_LABELS' --unattended"
+sudo -u "$RUNNER_USER" -H bash -lc "cd '$ORG_RUNNER_DIR' && ./config.sh --url $ORG_URL --token '$ORG_RUNNER_TOKEN' --name '$ORG_RUNNER_NAME' --labels '$ORG_LABELS' --unattended"
 ```
 ---
 
@@ -388,6 +417,8 @@ Fix:
 - In GitHub runner page, check runner labels.
 - Ensure workflow has at least `self-hosted` and the labels you actually set.
 - If using runner groups, confirm the repo is allowed.
+- If repository is public, confirm that the runner group allows public repositories:
+  Organization → Settings → Actions → Runner groups → Enable "Allow public repositories"
 
 ---
 

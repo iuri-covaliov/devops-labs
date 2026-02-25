@@ -1,5 +1,5 @@
 # Self-hosted GitHub Actions Runners on Linux Server
-Owning Your GitLab CI
+Owning Your GitHub Actions CI
 ---
 
 This lab explores how to move GitHub Actions workloads from
@@ -33,7 +33,7 @@ configuration.
 
 ------------------------------------------------------------------------
 
-![Scheme: GitLab Self-hosted runners](./docs/images/github-selfhosted-runners.png)
+![Scheme: GitHub Self-hosted runners](./docs/images/github-selfhosted-runners.png)
 
 ------------------------------------------------------------------------
 
@@ -122,6 +122,40 @@ Each runner:
 4.  Verify label-based targeting works as expected.
 
 All commands are reproducible on Ubuntu 24.04.
+
+------------------------------------------------------------------------
+
+## Known Pitfalls
+
+### Snap-installed Docker on Ubuntu
+
+On Ubuntu 24, installing Docker via Snap may cause build failures when the runner workspace lives under `/opt`.
+
+Errors may look like:
+```
+lstat /var/lib/snapd/void/... no such file or directory
+```
+
+This is caused by Snap confinement restricting Docker’s access to the runner workspace.
+
+Resolution:
+- Remove Snap Docker
+- Install Docker via `apt` (`docker.io`)
+- Restart the runner service
+
+### Organization Runners and Public Repositories
+
+By default, runner groups do not allow public repositories.
+
+If a repository is public and this option is disabled, workflows may remain stuck in:
+```
+Waiting for a runner to pick up this job...
+```
+
+Resolution:
+- Organization → Settings → Actions → Runner groups
+- Enable “Allow public repositories”
+- Re-run the workflow
 
 ------------------------------------------------------------------------
 

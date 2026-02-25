@@ -141,6 +141,17 @@ If workloads grow:
 - Introduce container-based isolation
 - Consider ephemeral runners
 
+### Docker Installation on Ubuntu
+
+Installing Docker via Snap can introduce filesystem confinement issues.
+
+If the runner workspace lives under `/opt`, Snap-managed Docker may fail to access it, resulting in errors like:
+```
+lstat /var/lib/snapd/void/... no such file or directory
+```
+
+Using the apt-installed Docker (`docker.io`) avoids this issue.
+
 ---
 
 ## Security Notes
@@ -153,6 +164,14 @@ Key implications:
 - Organization-level runners increase flexibility but widen execution scope.
 - Labels should be explicit and intentional.
 - Runner groups can restrict which repositories can use a shared runner.
+
+### Runner Groups and Public Repositories
+
+Organization runner groups do not allow public repositories by default.
+
+If a repository is public and this option is disabled, workflows may remain in a waiting state even when the runner is online.
+
+Runner group configuration must explicitly allow public repositories when needed.
 
 ---
 
