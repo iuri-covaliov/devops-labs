@@ -10,7 +10,7 @@ and disposable, while the host establishes secure outbound connections.
 
 
 📖 Full article:\
-(link to be added)
+https://dev.to/iuri_covaliov/gitlab-behind-cloudflare-tunnel-removing-inbound-ssh-exposure-217m
 
 📖 Previous article:\
 https://dev.to/iuri_covaliov/self-hosting-gitlab-behind-cloudflare-zero-trust-a-practical-devops-lab-18ce
